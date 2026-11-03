@@ -1,8 +1,21 @@
 # MAS-Gate
 
+<div align="center">
+
 **Unlocking Multi-Agent System Lifecycle via Node-Centric Quantification**
 
-Anonymous research-code release. The repository is organized by the three experiment phases; author metadata, the authored manuscript, private configuration and run artifacts are excluded.
+Design-time construction · Runtime intervention · Post-hoc attribution
+
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.17613)
+[![Code](https://img.shields.io/badge/Code-GitHub-181717?logo=github&logoColor=white)](https://github.com/linhh29/MAS_Gate)
+[![Project Blog](https://img.shields.io/badge/Blog-Project%20Page-0078D4?logo=readthedocs&logoColor=white)](https://linhh29.github.io/blog/MAS-Gate/index.html)
+[![Online Demo](https://img.shields.io/badge/Demo-Online%20Demo-512BD4?logo=rocket&logoColor=white)](https://mas-gate-demo.hehailin.life/)
+
+</div>
+
+MAS-Gate uses node-level utility and communication influence to connect workflow construction, bounded runtime intervention, and failure attribution across the multi-agent system lifecycle. This repository contains research code for the three experiment phases.
+
+**Start here:** try the [online demo](https://mas-gate-demo.hehailin.life/) to replay the paper case or run a live workflow, read the [project blog](https://linhh29.github.io/blog/MAS-Gate/index.html) for an illustrated overview, or follow the [experiment entry points](#experiment-entry-points) below to explore the code.
 
 ## Repository map
 
@@ -30,7 +43,7 @@ exp3/                 Post-hoc failure attribution
 | exp2: runtime | [exp2/README.md](exp2/README.md) | Frozen planner/worker, scoring models, Editor model, task JSONL |
 | exp3: attribution | [exp3/README.md](exp3/README.md) | Benchmark traces, local scorer/NLI/localizer checkpoints |
 
-Each experiment manages its own dependencies. Avoid installing all GPU stacks into one environment by default. The separately distributed MAS-Gate Demo provides an API-based inference example.
+Each experiment manages its own dependencies. Avoid installing all GPU stacks into one environment by default. The separately deployed [MAS-Gate Demo](https://mas-gate-demo.hehailin.life/) provides an API-based inference example.
 
 ## Current runtime protocol
 
