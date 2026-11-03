@@ -1,0 +1,7 @@
+openai>=1.30.0
+numpy>=1.24.0
+tqdm>=4.66.0
+httpx>=0.27.0
+transformers>=5.12.0
+# Qwen3.6-35B-A3B (Qwen3_5MoeForConditionalGeneration) needs vLLM >= 0.17.0
+vllm>=0.17.0

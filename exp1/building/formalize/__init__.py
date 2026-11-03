@@ -1,0 +1,1 @@
+"""XML-based MAS orchestra: task decomposition + agent specs -> compiled MAS code."""

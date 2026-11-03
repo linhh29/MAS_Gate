@@ -1,0 +1,8 @@
+MAS-Gate research implementation
+Copyright 2026 MAS-Gate contributors
+
+Project-owned contributions are licensed under the Apache License, Version 2.0.
+Third-party code retains its original copyright and license notices.
+The vendored verl implementation is distributed under its own Apache-2.0 license
+at exp1/verl/LICENSE. File-level third-party notices remain authoritative.
+The license does not relicense external datasets, model weights, or manuscripts.

@@ -1,0 +1,48 @@
+{
+  "data_file": "data/train.jsonl",
+  "reference_dir": "runs/references",
+  "output_dir": "runs/editor",
+  "planner": {
+    "base_url": "http://127.0.0.1:8000/v1",
+    "model": "frozen-orchestra",
+    "api_key_env": "PLANNER_API_KEY",
+    "max_tokens": 2048
+  },
+  "worker": {
+    "base_url": "http://127.0.0.1:8001/v1",
+    "model": "frozen-sub-agent",
+    "api_key_env": "WORKER_API_KEY",
+    "temperature": 0.7,
+    "max_tokens": 2048
+  },
+  "quantifier": {
+    "scoring_model": "/path/to/frozen-scoring-llm",
+    "nli_model": "/path/to/frozen-nli-model",
+    "scoring_device": "cuda:1",
+    "nli_device": "cpu",
+    "entailment_label_id": 2
+  },
+  "correctness_adapter": null,
+  "training": {
+    "actor_model": "/path/to/editor-base-model",
+    "device_map": "cuda:0",
+    "dtype": "bfloat16",
+    "seed": 42,
+    "batch_tasks": 1,
+    "rollouts_per_task": 4,
+    "epochs": 1,
+    "steps": 1,
+    "learning_rate": 1e-6,
+    "lora_rank": 64,
+    "lora_alpha": 32,
+    "temperature": 1.0,
+    "max_prompt_tokens": 15000,
+    "max_action_tokens": 512,
+    "clip_ratio": 0.2,
+    "kl_coefficient": 0.001,
+    "beta_q": 0.1,
+    "lambda_cost": 1.0,
+    "invalid_reward": -0.25,
+    "checkpoint_steps": [1]
+  }
+}

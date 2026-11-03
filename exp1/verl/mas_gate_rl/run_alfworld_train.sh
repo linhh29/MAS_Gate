@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# Default to the latest unified inter-node quantification; set this variable explicitly to select a legacy mode.
+export QUANTIFICATION_INTER_NODE_MODE="${QUANTIFICATION_INTER_NODE_MODE:-unified_baseline}"
+set -euo pipefail
+ROOT=${MAS_GATE_ROOT:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)}
+cd "${ROOT}"
+
+export DATASET=alfworld
+export ALFWORLD_JSONL=${ALFWORLD_JSONL:-${ROOT}/datasets/alfworld/data/alfworld_train.jsonl}
+export DATA_DIR=${DATA_DIR:-${ROOT}/verl/data/mas_gate_alfworld_b256_r16}
+export MAS_GATE_ALFWORLD_DATA_ROOT=${MAS_GATE_ALFWORLD_DATA_ROOT:-${ROOT}/../json_2.1.1}
+export MAS_GATE_ALFWORLD_ACTIONS_PER_NODE=${MAS_GATE_ALFWORLD_ACTIONS_PER_NODE:-4}
+export MAS_GATE_ALFWORLD_MAX_RECOVERY_ROUNDS=${MAS_GATE_ALFWORLD_MAX_RECOVERY_ROUNDS:-12}
+export VAL_RATIO=${VAL_RATIO:-0}
+export MAX_SAMPLES=${MAX_SAMPLES:-0}
+
+# ALFWorld previously had interactive evaluation/smoke only, not PPO/GRPO
+# parameter updates. Its new RL contract therefore inherits the validated
+# HotpotQA 256 x 16 high-concurrency configuration exactly.
+export TRAIN_BATCH_SIZE=256
+export ROLLOUT_N=16
+export DATA_PAD_TO_MULTIPLE=256
+export PPO_MINI_BATCH_SIZE=${PPO_MINI_BATCH_SIZE:-256}
+export PPO_MICRO_BATCH_SIZE_PER_GPU=${PPO_MICRO_BATCH_SIZE_PER_GPU:-8}
+export LOG_PROB_MICRO_BATCH_SIZE_PER_GPU=${LOG_PROB_MICRO_BATCH_SIZE_PER_GPU:-8}
+export PPO_MAX_TOKEN_LEN_PER_GPU=${PPO_MAX_TOKEN_LEN_PER_GPU:-32768}
+export MAX_RESPONSE_LENGTH=8192
+export MAS_GATE_SUB_AGENT_MAX_TOKENS=8192
+export MAS_GATE_SUB_AGENT_MIN_COMPLETION_TOKENS=8192
+export ACTOR_PARAM_OFFLOAD=True
+export ACTOR_OPTIMIZER_OFFLOAD=True
+
+export REWARD_NUM_WORKERS=${REWARD_NUM_WORKERS:-8}
+export MAS_GATE_MAX_CONCURRENCY=${MAS_GATE_MAX_CONCURRENCY:-128}
+export MAS_GATE_PHASE_CONCURRENCY=${MAS_GATE_PHASE_CONCURRENCY:-128}
+export MAS_GATE_SUB_AGENT_CONCURRENCY_PER_WORKER=${MAS_GATE_SUB_AGENT_CONCURRENCY_PER_WORKER:-16}
+export MAS_GATE_REWARD_EXECUTOR_MAX_WORKERS=${MAS_GATE_REWARD_EXECUTOR_MAX_WORKERS:-16}
+export VERL_REWARD_LOOP_EXECUTOR_MAX_WORKERS=${VERL_REWARD_LOOP_EXECUTOR_MAX_WORKERS:-16}
+export ROLLOUT_TP=${ROLLOUT_TP:-1}
+export ROLLOUT_MAX_NUM_SEQS=${ROLLOUT_MAX_NUM_SEQS:-16}
+export ROLLOUT_MAX_NUM_BATCHED_TOKENS=196608
+export SUB_AGENT_TP=8
+export SUB_AGENT_MAX_NUM_SEQS=${SUB_AGENT_MAX_NUM_SEQS:-128}
+export SUB_AGENT_VLLM_MAX_NUM_SEQS=${SUB_AGENT_VLLM_MAX_NUM_SEQS:-128}
+export SUB_AGENT_MAX_NUM_BATCHED_TOKENS=${SUB_AGENT_MAX_NUM_BATCHED_TOKENS:-8192}
+export SUB_AGENT_ENABLE_PREFIX_CACHING=0
+export SUB_AGENT_VLLM_USE_V1=${SUB_AGENT_VLLM_USE_V1:-1}
+export SUB_AGENT_GPU_MEMORY_UTILIZATION=${SUB_AGENT_GPU_MEMORY_UTILIZATION:-0.68}
+export MAS_GATE_QWEN_PHASE_MAX_NUM_BATCHED_TOKENS=${MAS_GATE_QWEN_PHASE_MAX_NUM_BATCHED_TOKENS:-8192}
+export QUANTIFICATION_SCORING_CONCURRENCY=${QUANTIFICATION_SCORING_CONCURRENCY:-16}
+export QUANTIFICATION_EMBEDDING_CONCURRENCY=${QUANTIFICATION_EMBEDDING_CONCURRENCY:-16}
+export ENABLE_QWEN30_KV_MONITOR=${ENABLE_QWEN30_KV_MONITOR:-0}
+
+# ALFWorld correctness remains authoritative live environment success.  Dense
+# U/K mean-impact is computed from the same MAS trace and fused group-wise with
+# environment correctness; the unrelated BCP semantic judge remains disabled.
+export MAS_GATE_ENVIRONMENT_REWARD_ONLY=0
+export MAS_GATE_REWARD_USE_QUANT=1
+export MAS_GATE_REWARD_METRIC_KEY=mean_impact
+export MAS_GATE_REWARD_FUSION_ENABLED=1
+export MAS_GATE_REWARD_FUSION_LAMBDA_CORRECT=1.0
+export QUANTIFICATION_USE_NLI=1
+export START_EMBEDDING_SERVER=1
+export QUANT_J_REQUEST_CONCURRENCY=${QUANT_J_REQUEST_CONCURRENCY:-16}
+export QUANT_BGE_REQUEST_CONCURRENCY=${QUANT_BGE_REQUEST_CONCURRENCY:-16}
+export QUANT_BGE_VLLM_MAX_NUM_SEQS=${QUANT_BGE_VLLM_MAX_NUM_SEQS:-128}
+export EMBEDDING_MAX_NUM_SEQS=${EMBEDDING_MAX_NUM_SEQS:-128}
+export START_BCP_JUDGE_SERVER=0
+export START_BCP_JUDGE_SERVER_EXPLICIT=1
+export MAS_GATE_BCP_LLM_JUDGE_ENABLED=0
+export MAS_GATE_ALLOW_JUDGE_FALLBACK_ON_QUANT_ERROR=0
+export MAS_GATE_FAIL_FAST_ALL_ERROR_REWARD=1
+export ENABLE_PHASE_CAPACITY_MONITOR=0
+export SUB_AGENT_ENABLE_PREFIX_CACHING=0
+export TOTAL_EPOCHS=${TOTAL_EPOCHS:-1}
+export SAVE_FREQ=${SAVE_FREQ:--1}
+export TEST_FREQ=${TEST_FREQ:--1}
+export VAL_BEFORE_TRAIN=${VAL_BEFORE_TRAIN:-False}
+export EXPERIMENT_NAME=${EXPERIMENT_NAME:-mas_gate_alfworld_train_$(date +%Y%m%d_%H%M%S)}
+
+[[ -f "${ALFWORLD_JSONL}" ]] || { echo "[ALFWORLD] missing training manifest: ${ALFWORLD_JSONL}" >&2; exit 2; }
+read -r _alfworld_rows < <(wc -l < "${ALFWORLD_JSONL}")
+[[ "${_alfworld_rows}" == "4032" ]] || { echo "[ALFWORLD] expected 4032 training rows, got ${_alfworld_rows}" >&2; exit 2; }
+if [[ "${MAS_GATE_CONFIG_ONLY:-0}" != "1" ]]; then
+  [[ -d "${MAS_GATE_ALFWORLD_DATA_ROOT}" ]] || { echo "[ALFWORLD] missing simulator data root: ${MAS_GATE_ALFWORLD_DATA_ROOT}" >&2; exit 2; }
+fi
+echo "[ALFWORLD] train_rows=${_alfworld_rows} padded_rows=4096 batch=${TRAIN_BATCH_SIZE} rollout_n=${ROLLOUT_N} expected_steps=16 reward=group_z(mean_impact)+1.0*group_z(environment_success) prefix_cache=disabled"
+exec bash "${ROOT}/verl/mas_gate_rl/run_mas_gate_grpo.sh" "$@"

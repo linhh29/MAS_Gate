@@ -1,0 +1,133 @@
+{
+  "_comment": "Model config: pricing + runtime endpoint env mapping. Keys match API model ids.",
+  "qwen3.6-35b-a3b": {
+    "input_per_1m": 0.2571,
+    "output_per_1m": 1.5428,
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792,
+    "extra_body": {
+      "enable_thinking": false
+    }
+  },
+  "qwen3-8b": {
+    "input_per_1m": 0.0,
+    "output_per_1m": 0.0,
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8011/v1",
+    "temperature": 1.0,
+    "max_tokens": 8192,
+    "extra_body": {
+      "enable_thinking": false
+    }
+  },
+  "Qwen3-8B": {
+    "input_per_1m": 0.0,
+    "output_per_1m": 0.0,
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8011/v1",
+    "temperature": 1.0,
+    "max_tokens": 8192,
+    "extra_body": {
+      "enable_thinking": false
+    }
+  },
+  "text-embedding-v4": {
+    "input_per_1m": 0.0714,
+    "output_per_1m": 0,
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "max_tokens": 8192
+  },
+  "qwen3-max": {
+    "input_per_1m": 0.3571,
+    "output_per_1m": 1.4286,
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "qwen3-next-80b-a3b-instruct": {
+    "input_per_1m": 0.143,
+    "output_per_1m": 0.572,
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "gemini-3.1-flash-lite-preview": {
+    "input_per_1m": 0.25,
+    "output_per_1m": 1.5,
+    "reasoning_effort": "low",
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "gpt-5.4-nano": {
+    "input_per_1m": 0.2,
+    "output_per_1m": 1.25,
+    "reasoning_effort": "low",
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "gpt-5.4-mini": {
+    "input_per_1m": 0.75,
+    "output_per_1m": 4.5,
+    "reasoning_effort": "low",
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "deepseek-v3.2": {
+    "input_per_1m": 0.2857,
+    "output_per_1m": 0.4285,
+    "reasoning_effort": "low",
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "deepseek-v4-flash": {
+    "input_per_1m": 0.1428,
+    "output_per_1m": 0.2857,
+    "api_key": "EMPTY",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "deepseek-chat": {
+    "input_per_1m": 0.1428,
+    "output_per_1m": 0.2857,
+    "api_key": "EMPTY",
+    "base_url": "https://api.deepseek.com",
+    "temperature": 1.0,
+    "max_tokens": 65792
+  },
+  "Qwen3-30B-A3B-Instruct-2507": {
+    "input_per_1m": 0.0,
+    "output_per_1m": 0.0,
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:8010/v1",
+    "temperature": 1.0,
+    "max_tokens": 16384,
+    "extra_body": {
+      "enable_thinking": false
+    }
+  },
+  "qwen3-14b-refiner": {
+    "input_per_1m": 0.0,
+    "output_per_1m": 0.0,
+    "api_key": "EMPTY",
+    "base_url": "http://127.0.0.1:9410/v1",
+    "temperature": 1.0,
+    "max_tokens": 8192,
+    "extra_body": {
+      "enable_thinking": false
+    }
+  }
+}

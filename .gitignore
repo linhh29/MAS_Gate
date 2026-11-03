@@ -1,0 +1,32 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+config.local.json
+*.local.json
+*.pem
+*.key
+# Generated data and experiment outputs
+**/runs/
+**/outputs/
+**/checkpoints/
+**/wandb/
+**/logs/
+*.log
+*.jsonl
+*.parquet
+*.pt
+*.pth
+*.safetensors
+# Development artifacts
+.git/
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.coverage
+.pytest_cache/
